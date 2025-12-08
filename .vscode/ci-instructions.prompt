@@ -1,0 +1,46 @@
+User CI Instructions — use this prompt when asking the assistant or Copilot to modify CI workflows
+
+Goal:
+- Ensure GitHub Actions runs the project's `Taskfile.yml` tasks for tests, lint, and format.
+
+Requirements / Constraints:
+- Workflow path: `.github/workflows/ci.yml` with jobs: `test`, `lint`, `check-format`.
+- Use `actions/checkout@v6` to check out the repository.
+- Use `actions/setup-python@v5` and set `python-version-file: "pyproject.toml"` so the runner uses the project's declared Python version.
+- Use `go-task/setup-task@v1` to install the `task` runner (do not curl-install it in the workflow).
+- Use `astral-sh/setup-uv@v6` to install the `uv` CLI and set `enable-cache: true` on that action.
+- Do NOT add explicit `version: 'latest'` inputs to third-party setup actions (omit `version` inputs unless necessary).
+- Do NOT run `python -m pip install --upgrade pip` in the workflow.
+- Do NOT directly `pip install` dev tools (pytest/ruff) in the workflow; instead run `uv sync` to install dev dependencies from `pyproject.toml`.
+- After `uv sync`, run the Taskfile tasks via `task test`, `task lint`, and `task check-format` (the `Taskfile.yml` uses `uv run ...`).
+
+Example job sequence (each job):
+1. `uses: actions/checkout@v6`
+2. `uses: actions/setup-python@v5` with `python-version-file: "pyproject.toml"`
+3. `uses: go-task/setup-task@v1`
+4. `uses: astral-sh/setup-uv@v6` with `enable-cache: true`
+5. `run: uv sync`
+6. `run: task <task-name>` (e.g. `task test`)
+
+Notes for commit / PR messages:
+- Use concise commit titles like: `ci: add CI workflow` or `ci: update workflow to use setup-uv and task`.
+
+Local sanity-check commands (run in project root):
+```bash
+# run Taskfile tasks locally
+uv sync
+task test
+task lint
+task check-format
+```
+
+Usage / prompt guidance for assistant:
+- When asking the assistant to edit the workflow, paste the current `.github/workflows/ci.yml` and request the specific change (e.g. "replace pip installs with `uv sync` and use `go-task/setup-task@v1`").
+- Ask the assistant to avoid `pip upgrade` and avoid explicit `version: 'latest'` inputs for setup actions.
+
+File locations referenced:
+- `pyproject.toml` — contains `requires-python` and dev dependency group (pytest, ruff)
+- `Taskfile.yml` — Taskfile tasks: `test`, `lint`, `check-format`
+- `.github/workflows/ci.yml` — the workflow file to create or modify
+
+End of prompt.
