@@ -14,3 +14,15 @@ tasks:
     cmds:
       - uv run pytest
     desc: Run the test suite
+
+  lint:
+    cmds:
+      - uv run ruff check .
+
+  check-format:
+    cmds:
+      - uv run ruff format --check
+
+  apply-format:
+    cmds:
+      - uv run ruff format .
