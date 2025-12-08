@@ -106,3 +106,10 @@ jobs:
 
       - name: Build package via Taskfile
         run: task build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: python-package-distributions
+          path: dist/
+
