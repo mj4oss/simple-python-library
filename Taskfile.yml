@@ -1,0 +1,28 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+  test:
+    cmds:
+      - uv run pytest
+    desc: Run the test suite
+
+  lint:
+    cmds:
+      - uv run ruff check .
+
+  check-format:
+    cmds:
+      - uv run ruff format --check
+
+  apply-format:
+    cmds:
+      - uv run ruff format .
