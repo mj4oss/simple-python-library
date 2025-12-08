@@ -80,3 +80,29 @@ jobs:
 
       - name: Run format check via Taskfile
         run: task check-format
+
+  build-package:
+    name: Build package
+    runs-on: ubuntu-latest
+    needs: [test, lint, check-format]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python from `pyproject.toml`
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Setup `task` runner
+        uses: go-task/setup-task@v1
+
+      - name: Setup `uv` CLI
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Run `uv sync` to install project (dev) dependencies
+        run: uv sync
+
+      - name: Build package via Taskfile
+        run: task build
