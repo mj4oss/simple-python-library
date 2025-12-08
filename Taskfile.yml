@@ -26,3 +26,15 @@ tasks:
   apply-format:
     cmds:
       - uv run ruff format .
+  
+  build:
+    cmds:
+      - uv build
+
+  clean:
+    desc: Remove build artifacts and Python caches
+    cmds:
+      - rm -rf build/ dist/ *.egg-info
+      - find . -type d -name "__pycache__" -exec rm -rf {} + || true
+      - find . -name "*.pyc" -delete || true
+
