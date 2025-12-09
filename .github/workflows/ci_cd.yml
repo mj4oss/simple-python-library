@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }} # Unique group for this workflow and branch (e.g., "CD-Pipeline-main")
+  cancel-in-progress: true # Cancels any running or pending workflow in this group
+  
 jobs:
   ## ---- CI Stage ----
   test:
