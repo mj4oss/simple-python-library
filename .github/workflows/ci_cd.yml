@@ -2,7 +2,8 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["**"] # TODO: chance this to main and release branches only
+    branches:
+      - main
   pull_request:
 
 jobs:
