@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["**"]  # TODO: chance this to main and release branches only
+    branches: ["**"] # TODO: chance this to main and release branches only
   pull_request:
 
 jobs:
@@ -112,6 +112,7 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
+          if-no-files-found: error
 
   ## CD Stage
   publish-package:
@@ -124,5 +125,4 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: python-package-distributions
-      - name: (Debugging) List files
-        run: ls -la dist/
+          path: dist/
