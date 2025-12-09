@@ -1,0 +1,5 @@
+# This file defines code owners for the repository.
+# GitHub will request reviews from these users for pull requests that modify these paths.
+
+# Global code owners - applies to all files
+* @mj4oss
