@@ -6,6 +6,7 @@ def test_hello():
     assert hello("Alice") == "Hello, Alice!"
     assert hello("") == "Hello, !"
 
+
 def test_sum():
     assert sum(2, 3) == 5
     assert sum(-1, 1) == 0
