@@ -2,7 +2,8 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["**"] # TODO: chance this to main and release branches only
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -115,14 +116,32 @@ jobs:
           if-no-files-found: error
 
   ## CD Stage
-  publish-package:
+  publish-package-to-integration:
     name: Publish to integration
     runs-on: ubuntu-latest
     needs: build-package
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: integration
     steps:
+      - run: echo "Publishing to ${{ vars.WORKSPACE_ENV }} environment"
+
       - name: Download build artifacts
         uses: actions/download-artifact@v5
         with:
           name: python-package-distributions
           path: dist/
+
+  publish-package-to-staging:
+    name: Publish to staging
+    runs-on: ubuntu-latest
+    needs: publish-package-to-integration
+    if: github.ref == 'refs/heads/main'
+    environment: staging
+    steps:
+      - run: echo "Publishing to ${{ vars.WORKSPACE_ENV }} environment"
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: python-package-distributions
+          path: dist/ 
