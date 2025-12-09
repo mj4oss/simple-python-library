@@ -112,6 +112,7 @@ jobs:
         with:
           name: python-package-distributions
           path: dist/
+          if-no-files-found: error
 
   ## CD Stage
   publish-package:
@@ -124,5 +125,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: python-package-distributions
+          path: dist/
+
       - name: (Debugging) List files
         run: ls -R
