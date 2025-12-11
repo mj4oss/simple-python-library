@@ -38,3 +38,9 @@ tasks:
       - find . -type d -name "__pycache__" -exec rm -rf {} + || true
       - find . -name "*.pyc" -delete || true
 
+  check-before-push:
+    desc: Run checks before
+    deps:
+      - test
+      - lint
+      - check-format
